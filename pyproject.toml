@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "patterson"
+version = "0.1.0"
+description = "XRR Patterson function (Fourier transform) analysis toolkit"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scipy",
+    "cycler",
+]
+
+[project.optional-dependencies]
+dev = ["build", "twine"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["patterson*"]

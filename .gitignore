@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data files (usually not committed)
+*.xrr
+*.fft
+*.ftMan
+
+# OS
+.DS_Store
+Thumbs.db
