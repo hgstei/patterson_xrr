@@ -22,3 +22,6 @@ dev = ["build", "twine"]
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["patterson*"]
+
+[tool.setuptools.package-data]
+patterson = ["*.xrr"]

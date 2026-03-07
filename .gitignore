@@ -14,6 +14,9 @@ build/
 *.fft
 *.ftMan
 
+# Exception: bundled example dataset
+!patterson/example_data.xrr
+
 # OS
 .DS_Store
 Thumbs.db
