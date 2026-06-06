@@ -7,12 +7,13 @@ import os
 import numpy as np
 
 
-def _wrap_label(path, width=30):
-    """Return basename of path with newlines at underscores when longer than width."""
+def _wrap_label(path, width=20):
+    """Return stem of basename (no extension) with newlines at underscores when longer than width."""
     name = os.path.basename(path)
-    if len(name) <= width:
-        return name
-    parts = name.split('_')
+    stem = name.split('.')[0]
+    if len(stem) <= width:
+        return stem
+    parts = stem.split('_')
     lines, cur = [], ''
     for part in parts:
         candidate = (cur + '_' + part) if cur else part
@@ -203,6 +204,8 @@ def patterson(
     if logPlot:
         target_ax.semilogy(distance, patterson_out * scale, label=label)
     if plot or logPlot:
+        target_ax.set_xlabel("d (Å)")
+        target_ax.set_ylabel("Patterson")
         target_ax.legend()
 
     if save:

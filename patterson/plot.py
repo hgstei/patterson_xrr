@@ -41,9 +41,12 @@ def plotXrr(dataFile, rho_sub=0.71, rho_pre=0.0, rffPlot=True, scale=1, ax=None)
     if rffPlot:
         rf = _fresnel_reflectivity(qq, rho_sub, rho_pre)
         target_ax.semilogy(qq, ii / rf * scale, label=label)
+        target_ax.set_ylabel(r"R/R$_\mathrm{F}$")
     else:
         target_ax.semilogy(qq, ii * scale, label=label)
+        target_ax.set_ylabel("R")
 
+    target_ax.set_xlabel(r"q$_z$ (Å$^{-1}$)")
     target_ax.legend()
 
 
