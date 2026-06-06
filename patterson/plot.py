@@ -10,7 +10,7 @@ import matplotlib.gridspec as gridspec
 import numpy as np
 import cycler
 
-from .core import _fresnel_reflectivity
+from .core import _fresnel_reflectivity, _wrap_label
 from .utils import natural_keys
 
 
@@ -37,11 +37,12 @@ def plotXrr(dataFile, rho_sub=0.71, rho_pre=0.0, rffPlot=True, scale=1, ax=None)
 
     target_ax = ax if ax is not None else plt.gca()
 
+    label = _wrap_label(dataFile)
     if rffPlot:
         rf = _fresnel_reflectivity(qq, rho_sub, rho_pre)
-        target_ax.semilogy(qq, ii / rf * scale, label=dataFile)
+        target_ax.semilogy(qq, ii / rf * scale, label=label)
     else:
-        target_ax.semilogy(qq, ii * scale, label=dataFile)
+        target_ax.semilogy(qq, ii * scale, label=label)
 
     target_ax.legend()
 
@@ -132,7 +133,7 @@ def plot_all(
         qq = data[:, 0]
         ii = data[:, 1]
         rf = _fresnel_reflectivity(qq, rho_sub, rho_pre)
-        ax1.semilogy(qq, ii / rf * nn, label=fileName, linewidth=1)
+        ax1.semilogy(qq, ii / rf * nn, label=_wrap_label(fileName), linewidth=1)
         nn *= 100
 
     # Patterson panel
@@ -145,7 +146,7 @@ def plot_all(
 
         y = pp / np.max(pp) if norm else pp
 
-        ax2.plot(rr, y + (offset if doScale else 0), label=fileName, linewidth=1)
+        ax2.plot(rr, y + (offset if doScale else 0), label=_wrap_label(fileName), linewidth=1)
 
         if i == 0:
             scale_step = np.max(y) / 10
@@ -156,8 +157,8 @@ def plot_all(
         ax2.legend(fontsize=8)
 
     if fileList_xr:
-        ax1.set_title(fileList_xr[0], fontsize=12)
-        ax2.set_title(fileList_xr[-1], fontsize=12)
+        ax1.set_title(_wrap_label(fileList_xr[0]), fontsize=12)
+        ax2.set_title(_wrap_label(fileList_xr[-1]), fontsize=12)
 
     if vline is not None:
         ax2.axvline(x=vline, color="k", alpha=0.3, linewidth=0.7)

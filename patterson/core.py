@@ -2,7 +2,28 @@
 Core Patterson function computation for XRR data analysis.
 """
 
+import os
+
 import numpy as np
+
+
+def _wrap_label(path, width=30):
+    """Return basename of path with newlines at underscores when longer than width."""
+    name = os.path.basename(path)
+    if len(name) <= width:
+        return name
+    parts = name.split('_')
+    lines, cur = [], ''
+    for part in parts:
+        candidate = (cur + '_' + part) if cur else part
+        if len(candidate) > width and cur:
+            lines.append(cur)
+            cur = part
+        else:
+            cur = candidate
+    if cur:
+        lines.append(cur)
+    return '\n'.join(lines)
 
 
 def _fresnel_reflectivity(qq, rho_sub=0.71, rho_pre=0.0):
@@ -60,7 +81,6 @@ def patterson(
     logPlot=True,
     scale=1,
     method=0,
-    modo=True,
     outputFile="foo",
     ax=None,
 ):
@@ -101,8 +121,6 @@ def patterson(
         Multiplicative scaling factor for plotting.
     method : {0, 1}
         0 = FFT (fast), 1 = manual DFT (slow, educational).
-    modo : bool
-        If True, return |FT|² (method=1 only); otherwise return complex FT.
     outputFile : str
         Base name for the saved output file.
     ax : matplotlib.axes.Axes, optional
@@ -165,7 +183,7 @@ def patterson(
             for q_j, rrf_j, dq_j in zip(qq[:-1], rrf_w[:-1], dq):
                 patt[iz] += rrf_j * np.exp(1j * z * q_j) * dq_j
 
-        patterson_out = np.abs(patt) ** 2 if modo else patt
+        patterson_out = np.abs(patt) ** 2
         distance = zz
 
     else:
@@ -179,10 +197,11 @@ def patterson(
     patterson_out[distance < zCutOff] = np.nan
 
     target_ax = ax if ax is not None else plt.gca()
+    label = _wrap_label(dataFile)
     if plot:
-        target_ax.plot(distance, patterson_out * scale, label=dataFile)
+        target_ax.plot(distance, patterson_out * scale, label=label)
     if logPlot:
-        target_ax.semilogy(distance, patterson_out * scale, label=dataFile)
+        target_ax.semilogy(distance, patterson_out * scale, label=label)
     if plot or logPlot:
         target_ax.legend()
 
